@@ -315,7 +315,7 @@ python3 -m pip install bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip --prefer-bin
 #直接启动
 bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple"
 #设置代理
-https_proxy="http://127.0.0.1:7890" http_proxy="http://127.0.0.1:7890" all_proxy="socks5://127.0.0.1:7891" no_proxy="localhost,127.0.0.1,::1" bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple"
+https_proxy="http://127.0.0.1:7890" http_proxy="http://127.0.0.1:7890" all_proxy="socks5://127.0.0.1:7891" no_proxy="localhost,127.0.0.1,::1" bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple" --api --api-log --api-auth "apple:apple"
 ```
 
 ### 4.配置lora-scripts
