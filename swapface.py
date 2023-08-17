@@ -73,7 +73,7 @@ if response.status_code != 200 :
 # Read results
 json_data = response.json()
 image_str = json_data.get('image')
-if image_str is None :
+if image_str is None or len(image_str) == 0:
     print("Image Not Found")
     sys.exit(1)
 
