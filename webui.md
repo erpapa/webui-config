@@ -276,13 +276,16 @@ sudo apt install google-perftools
 
 ```
 #可能安装不成功（下载到本地安装比较稳妥）
-pip install torch==2.0.1 torchvision==0.15.2 --extra-index-url https://download.pytorch.org/whl/cu118
+pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.1 --extra-index-url https://download.pytorch.org/whl/cu118
 #下载二进制包安装torch
 curl -O https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl
 pip install torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl
 #下载二进制包安装torchvision
 curl -O https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl
 pip install torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl
+#下载二进制包安装torchaudio
+curl -O https://download.pytorch.org/whl/cu118/torchaudio-2.0.2%2Bcu118-cp310-cp310-linux_x86_64.whl
+pip install torchaudio-2.0.2%2Bcu118-cp310-cp310-linux_x86_64.whl
 ```
 
 ##### 3.5.从指定的zip包安装依赖（modules/launch_utils.py）
@@ -313,7 +316,7 @@ python3 -m pip install bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip --prefer-bin
 
 ```
 #直接启动
-bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple"
+bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple" --api --api-log --api-auth "apple:apple"
 #设置代理
 https_proxy="http://127.0.0.1:7890" http_proxy="http://127.0.0.1:7890" all_proxy="socks5://127.0.0.1:7891" no_proxy="localhost,127.0.0.1,::1" bash webui.sh --listen --xformers --enable-insecure-extension-access --gradio-auth "apple:apple" --api --api-log --api-auth "apple:apple"
 ```
@@ -344,6 +347,8 @@ reg_data_dir=""               # directory for regularization images | 正则化�
 ```
 #高版本open-clip-torch可能会冲突，降为2.6.1
 pip install open-clip-torch==2.6.1
+#如果提示tensorboard依赖问题，升级到2.13.0
+pip install tensorboard==2.13.0
 #安装依赖
 pip install --upgrade -r requirements.txt
 pip install --upgrade lion-pytorch lycoris-lora dadaptation prodigyopt fastapi uvicorn wandb
@@ -454,7 +459,7 @@ https://blog.csdn.net/huazhang_001/article/details/128828999
 strings /lib/x86_64-linux-gnu/libc.so.6 | grep GLIBC_
 
 #编辑源/etc/apt/sources.list
-sudo vi /etc/apt/sources.list
+sudo vim /etc/apt/sources.list
 #添加高版本的源
 deb http://cn.archive.ubuntu.com/ubuntu jammy main #添加该行到文件
 
