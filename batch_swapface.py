@@ -11,8 +11,8 @@ from argparse import ArgumentParser
 
 argument_parser = ArgumentParser()
 argument_parser.add_argument("--source", required=True, type=Path)
-argument_parser.add_argument("--target", required=True, type=Path)
-argument_parser.add_argument("--output", required=True, type=Path)
+argument_parser.add_argument("--target", required=True, type=str)
+argument_parser.add_argument("--output", required=True, type=str)
 argument_parser.add_argument("--model", default="", required=False, type=str)
 argument_parser.add_argument("--faces_index", default="0", required=False, type=str)
 argument_parser.add_argument("--face_restorer_name", default="CodeFormer", required=False, type=str)
@@ -32,13 +32,15 @@ source_data = base64.b64encode(source_bytes.getvalue())
 # source_data = base64.b64encode(source_file.read())
 source_str = source_data.decode('utf-8')
 
-target_bytes = io.BytesIO()
-target_img = Image.open(arguments.target).convert('RGB')
-target_img.save(target_bytes, format="PNG")
-target_data = base64.b64encode(target_bytes.getvalue())
-# target_file = open(arguments.target, 'rb')
-# target_data = base64.b64encode(target_file.read())
-target_str = target_data.decode('utf-8')
+target_images = []
+target_files = arguments.target.split(",")
+for file in target_files:
+    target_bytes = io.BytesIO()
+    target_img = Image.open(file).convert('RGB')
+    target_img.save(target_bytes, format="PNG")
+    target_data = base64.b64encode(target_bytes.getvalue())
+    target_str = target_data.decode('utf-8')
+    target_images.append(target_str)
 
 # Request URL
 url = "http://127.0.0.1:7860"
@@ -53,7 +55,7 @@ headers = {
 # POST payload
 payload = {
     "source_image": source_str,
-    "target_image": target_str,
+    "target_images": target_images,
     "model": arguments.model,
     "faces_index": arguments.faces_index,
     "face_restorer_name": arguments.face_restorer_name,
@@ -65,18 +67,22 @@ payload = {
 }
 
 # Send request
-response = requests.post(url=f'{url}/roop/swap_face', headers=headers, json=payload)
+response = requests.post(url=f'{url}/roop/batch_swap_face', headers=headers, json=payload)
 if response.status_code != 200 :
     print(response.reason)
     sys.exit(1)
 
 # Read results
 json_data = response.json()
-image_str = json_data.get('image')
-if image_str is None or len(image_str) == 0:
+json_images = json_data.get('images')
+if json_images is None or len(json_images) == 0:
     print("Image Not Found")
     sys.exit(1)
 
-image_data = base64.b64decode(image_str)
-image_file = open(arguments.output, 'wb')
-image_file.write(image_data)
+output_files = arguments.output.split(",")
+min_length = min(len(json_images), len(output_files))
+for index in range(min_length):
+    image_str = json_images[index]
+    image_data = base64.b64decode(image_str)
+    image_file = open(output_files[index], 'wb')
+    image_file.write(image_data)

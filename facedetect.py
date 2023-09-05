@@ -23,7 +23,7 @@ source_data = base64.b64encode(source_bytes.getvalue())
 source_str = source_data.decode('utf-8')
 
 # Request URL
-url = "http://114.114.114.114:7860"
+url = "http://127.0.0.1:7860"
 
 # POST headers
 headers = {
