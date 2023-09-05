@@ -5,7 +5,7 @@ import sys
 import json
 import base64
 import requests
-from PIL import Image
+# from PIL import Image
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -27,20 +27,20 @@ argument_parser.add_argument("--enable", default=True, required=False, type=bool
 arguments = argument_parser.parse_args()
 
 # Read Image
-source_bytes = io.BytesIO()
-source_img = Image.open(arguments.source).convert('RGB')
-source_img.save(source_bytes, format="PNG")
-source_data = base64.b64encode(source_bytes.getvalue())
-# source_file = open(arguments.source, 'rb')
-# source_data = base64.b64encode(source_file.read())
+# source_bytes = io.BytesIO()
+# source_img = Image.open(arguments.source).convert('RGB')
+# source_img.save(source_bytes, format="PNG")
+# source_data = base64.b64encode(source_bytes.getvalue())
+source_file = open(arguments.source, 'rb')
+source_data = base64.b64encode(source_file.read())
 source_str = source_data.decode('utf-8')
 
-target_bytes = io.BytesIO()
-target_img = Image.open(arguments.target).convert('RGB')
-target_img.save(target_bytes, format="PNG")
-target_data = base64.b64encode(target_bytes.getvalue())
-# target_file = open(arguments.target, 'rb')
-# target_data = base64.b64encode(target_file.read())
+# target_bytes = io.BytesIO()
+# target_img = Image.open(arguments.target).convert('RGB')
+# target_img.save(target_bytes, format="PNG")
+# target_data = base64.b64encode(target_bytes.getvalue())
+target_file = open(arguments.target, 'rb')
+target_data = base64.b64encode(target_file.read())
 target_str = target_data.decode('utf-8')
 
 # Request URL
